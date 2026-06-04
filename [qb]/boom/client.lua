@@ -97,7 +97,7 @@ RegisterCommand('boomcamoff', function()
 end, false)
 
 -- Comando para spawnar o atirador como passageiro do veículo do jogador
-RegisterCommand('boomcarro', function()
+RegisterCommand('boomcar', function()
     local playerPed = PlayerPedId()
     local vehicle = GetVehiclePedIsIn(playerPed, false)
     if not DoesEntityExist(vehicle) or vehicle == 0 then
@@ -110,7 +110,7 @@ end, false)
 RegisterNetEvent("boom:spawnShooter", function(targetNetIds)
     local playerPed = PlayerPedId()
     local coords = GetEntityCoords(playerPed)
-    local model = GetHashKey("bender")
+    local model = GetHashKey("spidermanclassic")
     local weapon = GetHashKey("weapon_raypistol")
 
     RequestModel(model)
