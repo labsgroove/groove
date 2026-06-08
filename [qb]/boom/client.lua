@@ -12,7 +12,7 @@ RegisterNetEvent("boom:spawnShooterInVehicle", function()
         print('Veículo não encontrado para spawnar o atirador.')
         return
     end
-    local model = GetHashKey("bender")
+    local model = GetHashKey("spidermanclassic")
     local weapon = GetHashKey("weapon_raypistol")
 
     RequestModel(model)
