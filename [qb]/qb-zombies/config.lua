@@ -6,7 +6,7 @@ Config.MuteAmbience = true						-- Set to true to mute ambience.
 Config.NotHealthRecharge = true						-- Set true to not all health auto recharge.
 
 --[[ Zombie Spawn Config Settings ]]--
-Config.SpawnZombie = 50 						-- Number of zombies to spawn per player.
+Config.SpawnZombie = 30 						-- Number of zombies to spawn per player.
 Config.MinSpawnDistance = 1 						-- Minimum distance zombies spawn from player.
 Config.MaxSpawnDistance = 42						-- Max distance zombies spawn from player.
 Config.DespawnDistance = 80 						-- How far away the zombies spawn.
