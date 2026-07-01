@@ -106,7 +106,15 @@ RegisterNetEvent('qb-multicharacter:server:loadUserData', function(cData)
                 TriggerClientEvent('qb-spawn:client:openUI', src, true)
             end
         end
-        TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Loaded', 'green', '**' .. GetPlayerName(src) .. '** (<@' .. (QBCore.Functions.GetIdentifier(src, 'discord'):gsub('discord:', '') or 'unknown') .. '> |  ||' .. (QBCore.Functions.GetIdentifier(src, 'ip') or 'undefined') .. '|| | ' .. (QBCore.Functions.GetIdentifier(src, 'license') or 'undefined') .. ' | ' .. cData.citizenid .. ' | ' .. src .. ') loaded..')
+        local discord = QBCore.Functions.GetIdentifier(src, 'discord')
+        if discord then
+            discord = discord:gsub('discord:', '')
+        else
+            discord = 'unknown'
+        end
+        local ip = QBCore.Functions.GetIdentifier(src, 'ip') or 'undefined'
+        local license = QBCore.Functions.GetIdentifier(src, 'license') or 'undefined'
+        TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Loaded', 'green', '**' .. GetPlayerName(src) .. '** (<@' .. discord .. '> |  ||' .. ip .. '|| | ' .. license .. ' | ' .. cData.citizenid .. ' | ' .. src .. ') loaded..')
     end
 end)
 
@@ -200,7 +208,8 @@ end)
 QBCore.Functions.CreateCallback('qb-multicharacter:server:getSkin', function(_, cb, cid)
     local result = MySQL.query.await('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', { cid, 1 })
     if result[1] ~= nil then
-        cb(result[1].model, result[1].skin)
+        local skinData = type(result[1].skin) == 'string' and json.decode(result[1].skin) or result[1].skin
+        cb(skinData)
     else
         cb(nil)
     end

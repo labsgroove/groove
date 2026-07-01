@@ -32,18 +32,29 @@ end
 
 local function initializePedModel(model, data)
     CreateThread(function()
-        if not model then
-            model = joaat(randommodels[math.random(#randommodels)])
+        local modelHash = model
+        if not modelHash then
+            modelHash = joaat(randommodels[math.random(#randommodels)])
+        elseif type(modelHash) == 'string' then
+            modelHash = tonumber(modelHash) or joaat(modelHash)
         end
-        loadModel(model)
-        charPed = CreatePed(2, model, Config.PedCoords.x, Config.PedCoords.y, Config.PedCoords.z - 0.98, Config.PedCoords.w, false, true)
+
+        loadModel(modelHash)
+        charPed = CreatePed(2, modelHash, Config.PedCoords.x, Config.PedCoords.y, Config.PedCoords.z - 0.98, Config.PedCoords.w, false, true)
         SetPedComponentVariation(charPed, 0, 0, 0, 2)
         FreezeEntityPosition(charPed, false)
         SetEntityInvincible(charPed, true)
         PlaceObjectOnGroundProperly(charPed)
         SetBlockingOfNonTemporaryEvents(charPed, true)
+
         if data then
-            TriggerEvent('qb-clothing:client:loadPlayerClothing', data, charPed)
+            if GetResourceState('fivem-appearance') == 'started' and exports['fivem-appearance'] and exports['fivem-appearance'].setPedAppearance then
+                exports['fivem-appearance']:setPedAppearance(charPed, data)
+            elseif type(data) == 'string' then
+                TriggerEvent('qb-clothing:client:loadPlayerClothing', json.decode(data), charPed)
+            elseif type(data) == 'table' then
+                TriggerEvent('qb-clothing:client:loadPlayerClothing', data, charPed)
+            end
         end
     end)
 end
@@ -209,27 +220,20 @@ RegisterNUICallback('cDataPed', function(nData, cb)
     DeleteEntity(charPed)
     if cData ~= nil then
         if not cached_player_skins[cData.citizenid] then
-            local temp_model = promise.new()
-            local temp_data = promise.new()
+            local temp_skin = promise.new()
 
-            QBCore.Functions.TriggerCallback('qb-multicharacter:server:getSkin', function(model, data)
-                temp_model:resolve(model)
-                temp_data:resolve(data)
+            QBCore.Functions.TriggerCallback('qb-multicharacter:server:getSkin', function(skinData)
+                temp_skin:resolve(skinData)
             end, cData.citizenid)
 
-            local resolved_model = Citizen.Await(temp_model)
-            local resolved_data = Citizen.Await(temp_data)
-
-            cached_player_skins[cData.citizenid] = { model = resolved_model, data = resolved_data }
+            local resolved_skin = Citizen.Await(temp_skin)
+            cached_player_skins[cData.citizenid] = resolved_skin
         end
 
-        local model = cached_player_skins[cData.citizenid].model
-        local data = cached_player_skins[cData.citizenid].data
+        local skinData = cached_player_skins[cData.citizenid]
 
-        model = model ~= nil and tonumber(model) or false
-
-        if model ~= nil then
-            initializePedModel(model, json.decode(data))
+        if skinData then
+            initializePedModel(skinData.model, skinData)
         else
             initializePedModel()
         end
