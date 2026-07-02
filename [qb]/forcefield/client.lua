@@ -3,8 +3,8 @@ local active = false
 local hitCooldown = {}
 
 -- CONFIG
-local RADIUS = 6.3
-local FORCE = 25.0        -- intensidade do impacto
+local RADIUS = 5.0
+local FORCE = 15.0        -- intensidade do impacto
 local UP_FORCE = 13.0     -- vertical (batida, não balão)
 local COOLDOWN_MS = 500
 
