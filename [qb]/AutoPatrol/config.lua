@@ -15,7 +15,7 @@ Config.DefaultSpeed = 5 -- Default Speed based on Config.Speeds Index Position
 
 Config.SpeedUnit = 'KMH' -- 'MPH' OR 'KMH'
 
-Config.DriveStyle = 524607 -- Use this site to calculate your preferred driving style: https://vespura.com/fivem/drivingstyle/
+Config.DriveStyle = 319 -- Use this site to calculate your preferred driving style: https://vespura.com/fivem/drivingstyle/
 
 Config.Jobs = false -- Set to false if you want available to everyone
 
